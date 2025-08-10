@@ -5,7 +5,7 @@
     <div class="goods-detail" style="flex: 1;">
       <h1 id="good-title" />
       <h4 id="good-detail"></h4>
-      <div style="flex-grow: 1;"></div>
+      <div style="flex-grow: 1;" />
       
       <div class="option-bar">
         <button>加入购物车</button>
@@ -31,7 +31,6 @@
     product = await fetchProduct(handle)
     dialog.showModal()
     imageUrl = product.media[0].src
-    console.log('product', product)
     document.getElementById("img-box").src = imageUrl
     document.querySelector('#good-title').innerText = product.title
     document.querySelector('#good-detail').innerHTML = product.description || '暂无商品详情'
