@@ -53,26 +53,6 @@
 </div>
 
 {% stylesheet %}
-  .flex-box {
-    margin-top:30px;
-    display: flex;
-    gap: 40px;
-    height: 200px;
-  }
-
-  .flex-item {
-    flex:1;
-    border-radius: 8px;
-    background-color: #eef3ff;
-    color: rgb(92, 95, 98);
-    padding:20px;
-  }
-
-  .flex-item:hover{
-    transform: scale(1.1);
-    transition: transform 0.8s ease;
-  }
-
   .welcome {
     display: grid;
     grid-template-columns: var(--content-grid);
@@ -162,13 +142,3 @@
   ]
 }
 {% endschema %}
-
-<script>
-  // 页面加载完成后绑定事件
-  document.addEventListener('DOMContentLoaded', function() {
-    // 获取打开按钮并绑定点击事件
-    const openModalBtn = document.getElementById('openModalBtn');
-    openModalBtn.addEventListener('click', openModal);
-  });
-</script>
-
