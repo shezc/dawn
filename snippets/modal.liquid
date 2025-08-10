@@ -1,15 +1,11 @@
 <dialog id="dialog-box">
   <p id="drag-handle" style="cursor: move;padding:10px;background:#f5f5f6;">商品详情</p>
   <div style="padding: 10px;" class="dialog-content">
-    {% render 'image',
-      class: 'collection-product__image',
-      image: featuredImage,
-      url: currentUrl,
-      width: 400,
-      height: 400,
-      crop: 'center'
-    %}
-  
+    <img alt="" height="300" width="300" id="img-box" style="flex: 1">
+    <div class="goods-detail" style="flex: 1;">
+      <h1 id="good-title" />
+      <h2 id="good-price" />
+    </div>
   </div>
   <button id="hide-dialog-btn">×</button>
 </dialog>
@@ -21,30 +17,29 @@
   const closeBtn = document.getElementById('hide-dialog-btn')
   const dragHandle = document.getElementById('drag-handle')
   let product = null
-  let currentUrl = null
-  let currentIndex = 0
-  let featuredImage = null
+  let imageUrl = null
 
   // 打开模态窗口的函数
   async function openModal(params) {
     const {id,handle} = params
     product = await fetchProduct(handle)
     dialog.showModal()
-    currentUrl = product.images[currentIndex]
-    featuredImage = product.featured_image
-    console.log('里面获取的', currentUrl)
-    console.log(featuredImage)
+    imageUrl = product.media[0].src
+    document.getElementById("img-box").src = imageUrl
+    document.querySelector('#good-title').innerText = product.title
+    document.querySelector('#good-price').innerText = product.price
   }
 
   // 隐藏模态窗函数
   function hideModal() {
     dialog.close()
+    document.getElementById("img-box").src = null
+    document.querySelector('#good-title').innerText = null
+    document.querySelector('#good-price').innerText = null
   }
 
   // 绑定按钮事件
   closeBtn.addEventListener('click', hideModal)
-
-
 
   // 拖拽功能
   let isDragging = false
@@ -87,6 +82,12 @@
 {% stylesheet %}
   .dialog-content{
     display: flex;
+  }
+
+  .goods-detail {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
   }
 
   #dialog-box {
