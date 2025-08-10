@@ -4,7 +4,13 @@
     <img alt="" height="300" width="300" id="img-box" style="flex: 1">
     <div class="goods-detail" style="flex: 1;">
       <h1 id="good-title" />
-      <h2 id="good-price" />
+      <h4 id="good-detail"></h4>
+      <div style="flex-grow: 1;"></div>
+      
+      <div class="option-bar">
+        <button>加入购物车</button>
+        <button>立即购买</button>
+      </div>
     </div>
   </div>
   <button id="hide-dialog-btn">×</button>
@@ -25,9 +31,10 @@
     product = await fetchProduct(handle)
     dialog.showModal()
     imageUrl = product.media[0].src
+    console.log('product', product)
     document.getElementById("img-box").src = imageUrl
     document.querySelector('#good-title').innerText = product.title
-    document.querySelector('#good-price').innerText = product.price
+    document.querySelector('#good-detail').innerHTML = product.description || '暂无商品详情'
   }
 
   // 隐藏模态窗函数
@@ -35,7 +42,6 @@
     dialog.close()
     document.getElementById("img-box").src = null
     document.querySelector('#good-title').innerText = null
-    document.querySelector('#good-price').innerText = null
   }
 
   // 绑定按钮事件
@@ -88,6 +94,21 @@
     display: flex;
     flex-direction: column;
     padding: 24px;
+  }
+
+  .option-bar{
+    display: flex;
+  }
+
+  .option-bar button {
+    flex: 1;
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    border-radius: var(--style-border-radius-inputs);
+    background-color: #171717;
+    color: white;
+    cursor: pointer;
   }
 
   #dialog-box {
