@@ -1,0 +1,115 @@
+<dialog id="dialog-box">
+  <p id="drag-handle" style="cursor: move;padding:10px;background:#f5f5f6;">商品详情</p>
+  <div style="padding: 10px;" class="dialog-content">
+    {% render 'image',
+      class: 'collection-product__image',
+      image: featuredImage,
+      url: currentUrl,
+      width: 400,
+      height: 400,
+      crop: 'center'
+    %}
+  
+  </div>
+  <button id="hide-dialog-btn">×</button>
+</dialog>
+
+<script src="{{ 'api.js' | asset_url }}" async></script>
+<script>
+  // 获取元素
+  const dialog = document.getElementById('dialog-box')
+  const closeBtn = document.getElementById('hide-dialog-btn')
+  const dragHandle = document.getElementById('drag-handle')
+  let product = null
+  let currentUrl = null
+  let currentIndex = 0
+  let featuredImage = null
+
+  // 打开模态窗口的函数
+  async function openModal(params) {
+    const {id,handle} = params
+    product = await fetchProduct(handle)
+    dialog.showModal()
+    currentUrl = product.images[currentIndex]
+    featuredImage = product.featured_image
+    console.log('里面获取的', currentUrl)
+    console.log(featuredImage)
+  }
+
+  // 隐藏模态窗函数
+  function hideModal() {
+    dialog.close()
+  }
+
+  // 绑定按钮事件
+  closeBtn.addEventListener('click', hideModal)
+
+
+
+  // 拖拽功能
+  let isDragging = false
+  let startX, startY
+  let origLeft, origTop
+
+  dragHandle.addEventListener('mousedown', (e) => {
+    isDragging = true
+    // 获取初始鼠标位置
+    startX = e.clientX
+    startY = e.clientY
+
+    // 获取dialog当前left和top（去除transform影响）
+    const rect = dialog.getBoundingClientRect()
+    origLeft = rect.left
+    origTop = rect.top
+
+    // 禁止选中文本
+    e.preventDefault()
+  })
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return
+
+    const deltaX = e.clientX - startX
+    const deltaY = e.clientY - startY
+
+    // 更新dialog位置，移除transform让位置生效
+    dialog.style.left = origLeft + deltaX + 'px'
+    dialog.style.top = origTop + deltaY + 'px'
+    dialog.style.transform = 'none'
+  });
+
+  window.addEventListener('mouseup', () => {
+    isDragging = false
+  })
+
+</script>
+
+{% stylesheet %}
+  .dialog-content{
+    display: flex;
+  }
+
+  #dialog-box {
+    position: fixed;
+    padding: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 400px;
+    border-radius: 8px;
+    border: none;
+  }
+  #hide-dialog-btn {
+    position: absolute;
+    top: 7px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+  }
+{% endstylesheet %}
+

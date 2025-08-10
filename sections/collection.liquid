@@ -1,0 +1,84 @@
+{% comment %}
+  This section is used in the collection template to render collection page
+  listing all products within a collection.
+
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+{% endcomment %}
+
+<div class="collection-products">
+  {% paginate collection.products by 20 %}
+    {% for product in collection.products %}
+      <div class="collection-product">
+        {% if product.featured_image %}
+          {% render 'image',
+            class: 'collection-product__image',
+            image: product.featured_image,
+            url: product.url,
+            width: 400,
+            height: 400,
+            crop: 'center'
+          %}
+        {% endif %}
+        <div class="collection-product__content" id="product-list">
+          <p>{{ product.title | escape | link_to: product.url }}</p>
+          <p>{{ product.price | money }}</p>
+          
+          {% for variant in product.variants %}
+            <div style="color: {% if variant.inventory_quantity <= 10 %}red{% else %}black{% endif %};">库存：{{ variant.inventory_quantity }}</div>
+
+          {% if variant.inventory_quantity <= 10 %}
+            <div style="color:red">商品库存不足，喜欢的快快下单啦</div>
+          {% endif %}
+
+          {% endfor %}
+          {% render 'modal' %}
+          <button class="view-btn" id="goods-{{ product.id }}" data-handle="{{ product.handle }}">
+            Quick View
+          </button>
+        </div>
+      </div>
+    {% endfor %}
+
+    {{ paginate | default_pagination }}
+  {% endpaginate %}
+</div>
+
+{% stylesheet %}
+  .collection-product__image:hover{
+    transform: scale(1.1);
+    transition: transform 0.8s ease;
+  }
+
+  .collection-product__content {
+    margin-top: 30px;
+  }
+
+  .collection-products {
+    display: grid;
+    gap:20px;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.collection",
+  "settings": []
+}
+{% endschema %}
+
+<script>
+  const buttons = document.querySelectorAll('.view-btn')
+  
+  // 遍历绑定事件
+  buttons.forEach(function(btn) {
+    btn.addEventListener('click',function() {
+      const [_,id] = this.id.split('-')
+      const handle = this.dataset.handle
+      const params = {
+        id,handle
+      }
+      openModal(params)
+    })
+  })
+</script>
