@@ -24,7 +24,9 @@
           <p>{{ product.price | money }}</p>
           
           {% for variant in product.variants %}
-            <div style="color: {% if variant.inventory_quantity <= 10 %}red{% else %}black{% endif %};">库存：{{ variant.inventory_quantity }}</div>
+            <div>
+              库存：<span style="color: {% if variant.inventory_quantity <= 10 %}red{% else %}black{% endif %};">{{ variant.inventory_quantity }}</span>
+            </div>
           {% if variant.inventory_quantity <= 10 %}
             <div style="color:red">商品库存不足，喜欢的快快下单啦</div>
           {% endif %}
@@ -46,6 +48,10 @@
   .collection-product__image:hover{
     transform: scale(1.1);
     transition: transform 0.8s ease;
+  }
+
+  .view-btn {
+    margin-top: 10px;
   }
 
   .collection-product__content {
