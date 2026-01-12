@@ -1,0 +1,99 @@
+{% comment %}
+  Announcement bar
+
+  A simple, configurable banner that can be placed in the header group or on any template.
+{% endcomment %}
+
+{% if section.settings.text != blank %}
+  <div
+    class="announcement-bar full-width"
+    style="
+      --announcement-bar-background: {{ section.settings.background_color }};
+      --announcement-bar-foreground: {{ section.settings.text_color }};
+    "
+  >
+    <div class="announcement-bar__content">
+      {% if section.settings.link != blank %}
+        <a class="announcement-bar__link" href="{{ section.settings.link }}">
+          {{ section.settings.text }}
+        </a>
+      {% else %}
+        <p class="announcement-bar__text">{{ section.settings.text }}</p>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .announcement-bar {
+    background: var(--announcement-bar-background);
+    color: var(--announcement-bar-foreground);
+  }
+
+  .announcement-bar__content {
+    display: grid;
+    grid-template-columns: var(--content-grid);
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+    line-height: 1.2;
+  }
+
+  .announcement-bar__content > * {
+    grid-column: 2;
+  }
+
+  .announcement-bar__link,
+  .announcement-bar__text {
+    text-align: center;
+  }
+
+  .announcement-bar__link {
+    color: currentcolor;
+    text-decoration: none;
+  }
+
+  .announcement-bar__link:hover,
+  .announcement-bar__link:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "Free shipping on orders over $50"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement bar",
+      "category": "Text"
+    }
+  ]
+}
+{% endschema %}
